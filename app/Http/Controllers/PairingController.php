@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Models\PairingHistory;
 use Illuminate\Http\Request;
-use App\Models\PairingHistory;
+
 
 class PairingController extends Controller
 {
@@ -21,7 +21,7 @@ class PairingController extends Controller
         PairingHistory::create(['pairing' => json_encode($newPairings)]);
 
         // 生成された組み合わせをビューに返すなどの処理
-        return view('pairings.index', compact('newPairings'));
+        return view('index', compact('newPairings'));
     }
 
     private function generatePairingsLogic($people, $groupSizes, $pastPairings)
@@ -56,7 +56,7 @@ class PairingController extends Controller
         $uniquePairings = [];
 
         foreach ($newPairings as $pairing) {
-            if (!$this->hasOverlap($pairing, $pastPairings)) {
+            if (count(array_intersect($pairing, explode(',', $pastPairings))) > 0) {
                 $uniquePairings[] = $pairing;
             }
         }
